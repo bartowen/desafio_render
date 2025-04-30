@@ -3,11 +3,7 @@ from pickle import load
 
 app = Flask(__name__)
 model = load(open("../models/random_forest_42.sav", "rb"))
-class_dict = {
-    "0": "Iris setosa",
-    "1": "Iris versicolor",
-    "2": "Iris virginica"
-}
+
 
 @app.route("/", methods = ["GET", "POST"])
 def index():
@@ -17,12 +13,10 @@ def index():
         val1 = float(request.form["val1"])
         val2 = float(request.form["val2"])
         val3 = float(request.form["val3"])
-        val4 = float(request.form["val4"])
         
-        data = [[val1, val2, val3, val4]]
+        data = [[val1, val2, val3]]
         prediction = str(model.predict(data)[0])
-        pred_class = class_dict[prediction]
     else:
-        pred_class = None
+        prediction = None
     
-    return render_template("index.html", prediction = pred_class)
+    return render_template("index.html", prediction = prediction)
